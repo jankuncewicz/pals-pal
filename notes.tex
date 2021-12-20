@@ -1,0 +1,70 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{txfonts}
+\usepackage{hyperref}
+
+\begin{document}
+	\section{Calculating $\tau$ from ETE}
+	\subsection{Calculating zeroes of Bessel functions of the first kind}
+	\subsubsection{Initial thoughts}
+	Values of Bessel functions of the first kind are
+	kindly provided by the Go's mathematics package.
+	Because Bessel functions' derivatives can be defined by 
+	\begin{equation*}
+		\frac{d}{dx}J_n(x) = J_{n-1}(x) - \frac{n}{x}J_n(x)
+	\end{equation*}
+	or by
+	\begin{equation*}
+		\frac{d}{dx}J_n(x) = \frac{1}{2}(J_{n-1}(x) - J_{n+1}(x))
+	\end{equation*}
+	(which might be better because we don't peroform needless division by floating-point numbers),
+	we can use approximation techniques for finding zeroes that use derivatives.
+	I'm thinking mainly about Newton's or Halley's methodes.
+
+	Recursive sequence in Newton's method is defined in our case by
+	\begin{equation*}
+		x_{n+1} = x_n - \frac{J_v(x_n)}{J'_v(x_n)} = 
+			x_n - \frac{J_v(x_n)}{J_{v-1}(x) - \frac{v}{x_n}J_v(x)} =
+			x_n - \frac{2J_v(x)}{J_{v-1}(x) - J_{v+1}(x)}
+	\end{equation*}
+	The last equation might be actually worse than I innitialy thought
+	because we would need to calculate Bessel function 3 times compared to 2 times
+	in the second to last equation.
+
+	Halley's method can be defined by
+	\begin{equation*}
+		x_{n+1} = x_n - \frac{2J_v(x_n)J'_v(x_n)}{2(J'_v(x_n))^2 - J_v(x_n)J''_v(x_n)}
+	\end{equation*}
+	which looks not as easy by I will check how fast it converges compared to
+	Newton's method. Optimal function that calculates derivatives migh be easilly constructed.
+	\subsubsection{Code and comparisons}
+	\section{A study of the extended Tao-Eldrup model's parameters}
+		We are given following equations from \cite{Zaleski2015}:
+		\begin{equation}
+			P_{nm} = 
+				\frac
+					{\int\limits_{Z_{nm}\frac{R}{R+\Delta}}^{Z_{nm}}J_m(r)^2rdr}
+					{\int\limits_0^{Z_{nm}}J_m(r)^2rdr}
+		\end{equation}
+		\begin{equation}
+			\lambda_{nm} = \lambda_pP_{nm} + \lambda_i(1-P_{nm})
+		\end{equation}
+		\begin{equation}
+			\tau =
+				\frac
+					{\sum\limits_n\sum\limits_mg_m\mathrm{exp}\left(-\frac{E_{nm}}{kT}\right)}
+					{\sum\limits_n\sum\limits_mg_m\lambda_{nm}\mathrm{exp}\left(-\frac{E_{nm}}{kT}\right)}
+		\end{equation}
+		\begin{equation*}
+			E_{nm} = \frac{\hbar^2}{4m_e}\frac{{Z_{nm}}^2}{(R+\Delta)^2}
+		\end{equation*}
+		where $Z_{nm}$ is the $n$-th node of the Bessel function of the
+		first kind $J_m(r)$ and $g_m$ is the statistical weight of the $m$-th state
+		($g_0 = 1$, $g_{m>0}=2$).
+
+	\bibliographystyle{abbrvurl}
+	\bibliography{refs.bib}
+\end{document}
