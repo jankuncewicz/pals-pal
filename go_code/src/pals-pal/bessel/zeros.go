@@ -1,10 +1,9 @@
-package bessel_zeros
+package bessel
 
 import "math"
 
-const acc = 0.01
-
 func zero_newton(n int, x0 float64) float64 {
+	const acc = 0.01
 	err := 1.0
 	var x float64
 	for math.Abs(err) > acc {

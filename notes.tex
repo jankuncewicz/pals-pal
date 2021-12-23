@@ -7,9 +7,33 @@
 \usepackage{hyperref}
 
 \begin{document}
+	\section{Extended Tao-Eldrup model}
+	We are given following equations from \cite{Zaleski2015}:
+	\begin{equation}
+		\label{eq1}
+		P_{nm} = 
+			\frac
+				{\int\limits_{Z_{nm}\frac{R}{R+\Delta}}^{Z_{nm}}J_m(r)^2rdr}
+				{\int\limits_0^{Z_{nm}}J_m(r)^2rdr}
+	\end{equation}
+	\begin{equation}
+		\lambda_{nm} = \lambda_pP_{nm} + \lambda_i(1-P_{nm})
+	\end{equation}
+	\begin{equation}
+		\tau =
+			\frac
+				{\sum\limits_n\sum\limits_mg_m\mathrm{exp}\left(-\frac{E_{nm}}{kT}\right)}
+				{\sum\limits_n\sum\limits_mg_m\lambda_{nm}\mathrm{exp}\left(-\frac{E_{nm}}{kT}\right)}
+	\end{equation}
+	\begin{equation*}
+		E_{nm} = \frac{\hbar^2}{4m_e}\frac{{Z_{nm}}^2}{(R+\Delta)^2}
+	\end{equation*}
+	where $Z_{nm}$ is the $n$-th node of the Bessel function of the
+	first kind $J_m(r)$ and $g_m$ is the statistical weight of the $m$-th state
+	($g_0 = 1$, $g_{m>0}=2$).
 	\section{Calculating $\tau$ from ETE}
 	\subsection{Calculating zeroes of Bessel functions of the first kind}
-	\subsubsection{Initial thoughts}
+	\subsubsection{Approxmiating}
 	Values of Bessel functions of the first kind are
 	kindly provided by the Go's mathematics package.
 	Because Bessel functions' derivatives can be defined by 
@@ -41,32 +65,28 @@
 	which looks not as easy by I will check how fast it converges compared to
 	Newton's method. Optimal function that calculates derivatives migh be easilly constructed.
 	\subsubsection{Initial guess}
-	This might be even more problematic.
+	This wasn't easy because you can't use finite equation for 
+	it because it decreses precision with bigger values.
+
+	For zeros of $J_0(x)$ I used approximation given by McMahon's
+	asymptotic expansion	
+	\begin{equation}
+		j_{v,m} \sim a - \frac{\mu - 1}{8a} - \frac{4(\mu -1)(7\mu-31)}{3(8a)^3}
+			- \frac{32(\mu-1)(83\mu^2-982\mu+3779)}{15(8a)^5} - \dots
+	\end{equation}
+	where $j_{v,m}$ is the $m$-th zero of the Bessel function $J_v(x)$,
+	$\mu=4v^2$ and $a=(m+\frac{1}{2}v-\frac{1}{4})\pi$.
+	For futher terms see 
+	\href{https://dlmf.nist.gov/10.21.E19}{\texttt{https://dlmf.nist.gov/10.21.E19}}.
 	
-	\subsubsection{Code and comparisons}
+	For zeros $j_{v,m}$ where $v > 0$ I just put it in bounds $j_{v-1,m-1} < j_{v,m} < j_{v-1,m+1}$
+	and approximated using Newton's formula until I got what I wanted. I check values for
+	big $v$ and $m$ and got correct anserw so it is assumed that my code is working.
+
+	\subsection{Numerical integration}
+	Next mission is to calculate \ref{eq1} by using numerical 
+	integration algorithms.
 	\section{A study of the extended Tao-Eldrup model's parameters}
-		We are given following equations from \cite{Zaleski2015}:
-		\begin{equation}
-			P_{nm} = 
-				\frac
-					{\int\limits_{Z_{nm}\frac{R}{R+\Delta}}^{Z_{nm}}J_m(r)^2rdr}
-					{\int\limits_0^{Z_{nm}}J_m(r)^2rdr}
-		\end{equation}
-		\begin{equation}
-			\lambda_{nm} = \lambda_pP_{nm} + \lambda_i(1-P_{nm})
-		\end{equation}
-		\begin{equation}
-			\tau =
-				\frac
-					{\sum\limits_n\sum\limits_mg_m\mathrm{exp}\left(-\frac{E_{nm}}{kT}\right)}
-					{\sum\limits_n\sum\limits_mg_m\lambda_{nm}\mathrm{exp}\left(-\frac{E_{nm}}{kT}\right)}
-		\end{equation}
-		\begin{equation*}
-			E_{nm} = \frac{\hbar^2}{4m_e}\frac{{Z_{nm}}^2}{(R+\Delta)^2}
-		\end{equation*}
-		where $Z_{nm}$ is the $n$-th node of the Bessel function of the
-		first kind $J_m(r)$ and $g_m$ is the statistical weight of the $m$-th state
-		($g_0 = 1$, $g_{m>0}=2$).
 
 	\bibliographystyle{abbrvurl}
 	\bibliography{refs.bib}
