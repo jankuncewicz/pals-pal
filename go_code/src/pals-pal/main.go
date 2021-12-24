@@ -7,20 +7,17 @@ import (
 )
 
 func main() {
-	m := 100
-	n := 50
-	zeros := bessel.Zeros(m, n)
-	ints := make([][]float64, m)
-	hold := make([]float64, n)
-	for i := 0; i < m; i++ {
-		hold[0] = bessel.Integrate(0, zeros[i][0], i)
-		for j := 1; j < n; j++ {
-			hold[j] = hold[j-1] + bessel.Integrate(zeros[i][j-1], zeros[i][j], i)
-		}
-		ints[i] = hold
-		hold = make([]float64, n)
+	n := 100
+	m := 50
+	zeros := bessel.Zeros(n, m)
+	ints := bessel.IntegralList(n, m, zeros)
+	for i := .1; i < .99; i += .1 {
+		fmt.Println(i, ete.Tau(n, m, i/2, 0.193, 300, zeros, ints))
 	}
-	for i := 1.0; i < 10000; i += 50 {
-		fmt.Println(i/100, ete.Tau(m, n, i/2, 0.193, 300, zeros, ints))
+	for i := 1.0; i < 10; i += .5 {
+		fmt.Println(i, ete.Tau(n, m, i/2, 0.193, 300, zeros, ints))
+	}
+	for i := 10.0; i <= 100; i += 5 {
+		fmt.Println(i, ete.Tau(n, m, i/2, 0.193, 300, zeros, ints))
 	}
 }

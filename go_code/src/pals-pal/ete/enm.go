@@ -4,7 +4,7 @@ import "math"
 
 func Enm(zero, R, delta, T float64) float64 {
 	// c = hbar^2/4me*k
-	const c = 2.21068e2
+	const c = 221.068
 	return -c * math.Pow(zero/(R+delta), 2) / T
 }
 
