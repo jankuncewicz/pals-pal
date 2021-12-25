@@ -3,6 +3,7 @@ package bessel
 import "math"
 
 func Integrate(start, end float64, m int) float64 {
+	// TODO: better integration algorithm
 	const acc = 50
 	delta := (end - start) / acc
 	ans := 0.0
