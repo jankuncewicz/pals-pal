@@ -5,6 +5,7 @@
 \usepackage{amssymb}
 \usepackage{txfonts}
 \usepackage{hyperref}
+\usepackage{graphicx}
 
 \begin{document}
 	\section{Extended Tao-Eldrup model}
@@ -44,7 +45,6 @@
 	\begin{equation*}
 		\frac{d}{dx}J_n(x) = \frac{1}{2}(J_{n-1}(x) - J_{n+1}(x))
 	\end{equation*}
-	(which might be better because we don't peroform needless division by floating-point numbers),
 	we can use approximation techniques for finding zeroes that use derivatives.
 	I'm thinking mainly about Newton's or Halley's methodes.
 
@@ -63,31 +63,46 @@
 		x_{n+1} = x_n - \frac{2J_v(x_n)J'_v(x_n)}{2(J'_v(x_n))^2 - J_v(x_n)J''_v(x_n)}
 	\end{equation*}
 	which looks not as easy by I will check how fast it converges compared to
-	Newton's method. Optimal function that calculates derivatives migh be easilly constructed.
+	Newton's method.
 	\subsubsection{Initial guess}
 	This wasn't easy because you can't use finite equation for 
 	it because it decreses precision with bigger values.
 
 	For zeros of $J_0(x)$ I used approximation given by McMahon's
-	asymptotic expansion	
+	asymptotic expansion \cite[equation 10.21.19]{NIST:DLMF}	
 	\begin{equation}
 		j_{v,m} \sim a - \frac{\mu - 1}{8a} - \frac{4(\mu -1)(7\mu-31)}{3(8a)^3}
 			- \frac{32(\mu-1)(83\mu^2-982\mu+3779)}{15(8a)^5} - \dots
 	\end{equation}
 	where $j_{v,m}$ is the $m$-th zero of the Bessel function $J_v(x)$,
 	$\mu=4v^2$ and $a=(m+\frac{1}{2}v-\frac{1}{4})\pi$.
-	For futher terms see 
-	\href{https://dlmf.nist.gov/10.21.E19}{\texttt{https://dlmf.nist.gov/10.21.E19}}.
 	
 	For zeros $j_{v,m}$ where $v > 0$ I just put it in bounds $j_{v-1,m-1} < j_{v,m} < j_{v-1,m+1}$
-	and approximated using Newton's formula until I got what I wanted. I check values for
+	\cite[equation 10.21.2]{NIST:DLMF} and approximated using Newton's formula until I got what I wanted. I check values for
 	big $v$ and $m$ and got correct anserw so it is assumed that my code is working.
 
 	\subsection{Numerical integration}
 	Next mission is to calculate \ref{eq1} by using numerical 
 	integration algorithms.
+	Use of simple midpoint rule is inefficient so there's need to use Gauss'
+	quadrature. I arbitrarily chose 10 points given in \cite[table 3.5.2]{NIST:DLMF}
 	\section{A study of the extended Tao-Eldrup model's parameters}
-
+	%% TODO: fill it with text
+		\subsection{Temperature}
+			\begin{figure}[ht]
+				\centering
+				\input{params/temp/out.tex}
+			\end{figure}
+		\subsection{Resolution}
+			\begin{figure}[ht]
+				\centering
+				\input{params/res/out.tex}
+			\end{figure}
+		\subsection{$\Delta$}
+			\begin{figure}[ht]
+				\centering
+				\input{params/delta/out.tex}
+			\end{figure}
 	\bibliographystyle{abbrvurl}
 	\bibliography{refs.bib}
 \end{document}
