@@ -6,6 +6,7 @@
 \usepackage{txfonts}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{subcaption}
 
 \begin{document}
 	\section{Extended Tao-Eldrup model}
@@ -88,21 +89,21 @@
 	quadrature. I arbitrarily chose 10 points given in \cite[table 3.5.2]{NIST:DLMF}
 	\section{A study of the extended Tao-Eldrup model's parameters}
 	%% TODO: fill it with text
-		\subsection{Temperature}
-			\begin{figure}[ht]
-				\centering
-				\input{params/temp/out.tex}
-			\end{figure}
-		\subsection{Resolution}
-			\begin{figure}[ht]
-				\centering
-				\input{params/res/out.tex}
-			\end{figure}
-		\subsection{$\Delta$}
-			\begin{figure}[ht]
-				\centering
-				\input{params/delta/out.tex}
-			\end{figure}
+	\begin{figure}[!ht]
+	\centering
+	\scalebox{.9}{\input{params/temp/out.tex}}
+	\caption{Temperature}
+	\end{figure}
+	\begin{figure}[!ht]
+	\centering
+	\scalebox{.9}{\input{params/res/out.tex}}
+	\caption{Number of $n = m$ to sum}
+	\end{figure}
+	\begin{figure}[!ht]
+	\centering
+	\scalebox{.9}{\input{params/delta/out.tex}}
+	\caption{$\Delta$ parameter}
+	\end{figure}
 	\bibliographystyle{abbrvurl}
 	\bibliography{refs.bib}
 \end{document}

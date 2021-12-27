@@ -3,7 +3,7 @@ package bessel
 import "math"
 
 func zero_newton(n int, x0 float64) float64 {
-	const acc = 0.01
+	const acc = 0.001
 	err := 1.0
 	var x float64
 	for math.Abs(err) > acc {

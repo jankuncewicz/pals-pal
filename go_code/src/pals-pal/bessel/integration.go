@@ -7,7 +7,6 @@ func Integrate(start, end float64, m int) float64 {
 	delta := (end - start) / acc
 	ans := 0.0
 	for i := 0; i < acc; i++ {
-		//mid := delta * (2*float64(i) + 1) / 2
 		mid := (2*start + float64(2*i+1)*delta) / 2
 		ans += math.Pow(math.Jn(m, mid), 2) * delta
 	}
@@ -21,8 +20,8 @@ func Integrate_gauss(start, end float64, m int) float64 {
 	a := (start + end) / 2
 	b := (end - start) / 2
 	for i := 0; i < 5; i++ {
-		ans += w[i] * math.Pow(math.Jn(m, b*x[i]+a), 2)
-		ans += w[i] * math.Pow(math.Jn(m, -b*x[i]+a), 2)
+		ans += w[i] * math.Pow(math.Jn(m, b*x[i]+a), 2) * (b*x[i] + a)
+		ans += w[i] * math.Pow(math.Jn(m, -b*x[i]+a), 2) * (-b*x[i] + a)
 	}
 	return b * ans
 }
