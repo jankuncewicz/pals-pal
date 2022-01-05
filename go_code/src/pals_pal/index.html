@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<script src="wasm_exec.js"></script>
+		<script>
+			const go = new Go();
+			WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject)
+				.then(result => go.run(result.instance)).catch(error => console.log(error));
+		</script>
+		<style>
+			#whole{
+				max-width: 500px;
+				margin: auto;
+			}
+			.text{
+				width: 250px;
+			}
+			#nm{
+				width: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="whole">
+		<div class="text">
+			<label for="tau">Tau (ns)</label>
+			<br>
+			<input type="text" id="tau">
+		</div>
+		<div class="text">
+			<label for="temp">Temperature (K)</label>
+			<br>
+			<input type="text" id="temp" value="293">
+		</div>
+		<div class="text">
+			<label for="delta">Delta (nm)</label>
+			<br>
+			<input type="text" id="delta" value="0.165">
+		</div>
+		<div class="text" id="nm">
+			<label for="n">n</label>
+			<br>
+			<input type="text" id="n" value="20" size="3">
+		</div>
+		<div class="text" id="nm">
+			<label for="m">m</label>
+			<br>
+			<input type="text" id="m" value="20" size="3">
+		</div>
+		</div>
+	</body>
+</html>

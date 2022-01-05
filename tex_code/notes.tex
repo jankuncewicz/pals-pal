@@ -34,7 +34,7 @@
 	first kind $J_m(r)$ and $g_m$ is the statistical weight of the $m$-th state
 	($g_0 = 1$, $g_{m>0}=2$).
 	\section{Calculating $\tau$ from ETE}
-	\subsection{Calculating zeroes of Bessel functions of the first kind}
+	\subsection{Calculating zeros of Bessel functions of the first kind}
 	\subsubsection{Approxmiating}
 	Values of Bessel functions of the first kind are
 	kindly provided by the Go's mathematics package.
@@ -104,6 +104,22 @@
 	\scalebox{.9}{\input{params/delta/out.tex}}
 	\caption{$\Delta$ parameter}
 	\end{figure}
+	\section{Calculating $R$ from ETE}
+	\subsection{Initial guess}
+	I went for approxmiating $\tau$ as 
+	\begin{equation}
+		\tau \approx \frac{140}{1+x/5^{-3/2}},
+	\end{equation}
+	which is a CDF of a log-logistic distribution.
+
+	It looks quite good but it doesn't matter so much as
+	it will just get corrected.
+	I will check later fo comparison against different approximation.
+	I used wxMaxima to calculate inverse of this function which in my case
+	will be 
+	\begin{equation}
+		R \approx \left(\frac{39480499x}{4993932(140-x)}\right)^{\textstyle\frac{2}{3}}
+	\end{equation}
 	\bibliographystyle{abbrvurl}
 	\bibliography{refs.bib}
 \end{document}
