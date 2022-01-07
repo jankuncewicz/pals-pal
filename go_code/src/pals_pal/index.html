@@ -5,6 +5,8 @@
 		<script>
 			const go = new Go();
 			let mod, inst;
+			var zeros = []
+			var ints = []
 			WebAssembly.instantiateStreaming(fetch("main.wasm"), go.importObject)
 				.then(result => {
 					mod = result.module;
