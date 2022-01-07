@@ -11,3 +11,4 @@ articles
 *.fdb_latexmk
 *.fls
 out*
+wasm_exec.js
