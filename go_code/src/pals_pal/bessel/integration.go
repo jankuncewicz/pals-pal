@@ -26,18 +26,36 @@ func Integrate_gauss(start, end float64, m int) float64 {
 	return b * ans
 }
 
-func IntegralList(v, m int, zeros [][]float64) [][]float64 {
+func IntegralList(v, m int, zeros, ints [][]float64) [][]float64 {
 	// v -- max degree - 1
 	// m -- max zero no.
-	ints := make([][]float64, v)
-	hold := make([]float64, m)
+	var beg int
+	len_ints_row := len(ints)
+	var len_ints_col int
+	if len_ints_col == 0 {
+		len_ints_col = 0
+	} else {
+		len_ints_col = len(ints[0])
+	}
+	ans := make([][]float64, v)
 	for i := 0; i < v; i++ {
-		hold[0] = Integrate_gauss(0, zeros[i][0], i)
-		for j := 1; j < m; j++ {
+		hold := make([]float64, m)
+		if i < len_ints_row {
+			beg = len_ints_col
+		} else {
+			beg = 0
+		}
+		for j := 0; j < beg; j++ {
+			hold[j] = ints[i][j]
+		}
+		if beg == 0 {
+			hold[0] = Integrate_gauss(0, zeros[i][0], i)
+			beg++
+		}
+		for j := beg; j < m; j++ {
 			hold[j] = hold[j-1] + Integrate_gauss(zeros[i][j-1], zeros[i][j], i)
 		}
-		ints[i] = hold
-		hold = make([]float64, m)
+		ans[i] = hold
 	}
-	return ints
+	return ans
 }

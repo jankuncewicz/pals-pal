@@ -1,6 +1,8 @@
 package bessel
 
-import "math"
+import (
+	"math"
+)
 
 func zero_newton(n int, x0 float64) float64 {
 	const acc = 0.001
@@ -25,22 +27,41 @@ func bessel_guess(v, m int) float64 {
 	return x0
 }
 
-func Zeros(v, m int) [][]float64 {
+func Zeros(v, m int, zeros [][]float64) [][]float64 {
 	// v -- max degree - 1
 	// m -- max zero no.
 
 	// table for degree = 0
 	current := make([]float64, m+v-1)
-	for i := 1; i < v+m; i++ {
-		current[i-1] = zero_newton(0, bessel_guess(0, i))
+	var len_zeros_0 int
+	if len(zeros) == 0 {
+		len_zeros_0 = 0
+	} else {
+		len_zeros_0 = len(zeros[0])
+	}
+	for i := 0; i < len_zeros_0; i++ {
+		current[i] = zeros[0][i]
+	}
+	for i := len_zeros_0; i < m+v-1; i++ {
+		current[i] = zero_newton(0, bessel_guess(0, i+1))
 	}
 	// not precise enough, use j_v,1 < j_v+1,1 < j_v,2 < j_v+1,2 ...
 
+	len_zeros := len(zeros)
+	var beg int
 	ans := make([][]float64, v)
-	ans[0] = current[:m]
+	ans[0] = current
 	for i := 1; i < v; i++ {
 		hold := make([]float64, m+v-i-1)
-		for j := 1; j < m+v-i; j++ {
+		if i < len_zeros {
+			beg = len(zeros[i])
+		} else {
+			beg = 0
+		}
+		for j := 0; j < beg; j++ {
+			hold[j] = zeros[i][j]
+		}
+		for j := beg + 1; j < m+v-i; j++ {
 			x0 := current[j-1]
 			zero_hold := zero_newton(i, x0)
 			for zero_hold > current[j] || zero_hold < current[j-1] {
@@ -50,9 +71,7 @@ func Zeros(v, m int) [][]float64 {
 			hold[j-1] = zero_newton(i, x0)
 		}
 		current = hold
-		ans[i] = current[:m]
+		ans[i] = current
 	}
 	return ans
 }
-
-// TODO: make array af bessel zeros resizable

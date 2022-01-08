@@ -12,3 +12,4 @@ articles
 *.fls
 out*
 wasm_exec.js
+.vscode
