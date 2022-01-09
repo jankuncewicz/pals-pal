@@ -21,6 +21,7 @@ func zero_newton(x0, tau float64, n, m int, delta, T float64, zeros, ints [][]fl
 }
 
 func ApproxR(tau float64, n, m int, delta, T float64, zeros, ints [][]float64) float64 {
-	r_guess := math.Pow((39480499*tau)/(4993932*math.Abs(140-tau)), 2.0/3.0)
+	// TODO: better guess for small T and large tau
+	r_guess := 0.25 * math.Pow((39480499*tau)/(1248483*math.Abs(140-tau)), 2.0/3.0)
 	return zero_newton(r_guess, tau, n, m, delta, T, zeros, ints)
 }
