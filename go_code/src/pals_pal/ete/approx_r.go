@@ -14,6 +14,7 @@ func zero_newton(x0, tau float64, n, m int, delta, T float64, zeros, ints [][]fl
 		f2 := Tau(n, m, x0+d*x0, delta, T, zeros, ints) - tau
 		deriv := (f2 - f1) / (d * x0)
 		x = x0 - f1/deriv
+		x = math.Mod(math.Abs(x), 140)
 		err = x0 - x
 		x0 = x
 	}
