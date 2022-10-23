@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>pals-pal</title>
+		<style>
+			#whole{
+				max-width: 500px;
+				margin: auto;
+			}
+			.text{
+				width: 250px;
+				padding: 5px;
+			}
+			.tabs{
+				border: 2px black solid;
+				background-color: white;
+				padding: 8px;
+			}
+			#tabs button:hover{
+				background-color: #ddd;
+			}
+		</style>
+	</head>
+	<body>
+		<script src="tabs.js"></script>
+		<script src="index.js"></script>
+		<div id="whole">
+		<div id="tabs">
+			<button id="tab0" class="tabs" onclick="changeState(0)">Calculate tau</button>
+			<button id="tab1" class="tabs" onclick="changeState(1)" style="background-color: #ccc;">
+				Calculate R (singular)
+			</button>
+			<button id="tab2" class="tabs" onclick="changeState(2)">Calculate R (from .csv)</button>
+		</div>
+		<hr>
+		<form id="form" onsubmit="run();" autocomplete="off">
+		<div class="text">
+			<label for="tau">Tau (ns)</label>
+			<br>
+			<input type="text" id="tau" required>
+		</div>
+		<div class="text">
+			<label for="temp">Temperature (K)</label>
+			<br>
+			<input type="text" id="temp" value="293" required>
+		</div>
+		<div class="text">
+			<label for="delta">Delta (nm)</label>
+			<br>
+			<input type="text" id="delta" value="0.165" required>
+		</div>
+		<div class="text">
+			<label for="ans">R (nm)</label>
+			<br>
+			<input id="ans" type="text" readonly>
+		</div>
+		<div class="text">
+			<input id="file" type="file" disabled>
+		</div>
+		<div class="text">
+			<input id="submit" type="submit" value="Calculate">
+		</div>
+		</form>
+		<canvas id="canvas" width="600" height="400"></canvas>
+		</div>
+		<script>
+			document.getElementById("form").addEventListener("submit", e => e.preventDefault())
+		</script>
+	</body>
+</html>

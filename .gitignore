@@ -13,3 +13,4 @@ out*
 wasm_exec.js
 .vscode
 target
+.DS_Store
