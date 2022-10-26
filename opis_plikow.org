@@ -1,0 +1,7 @@
+* pals-pal
+Głowny folder z plikami programu.
+* tex_code
+Moje własne notatki, obserwacje, wykresy. Mogą nie być do końca napisane ładnym językiem,
+ani do końca prawdziwe.
+* articles
+Zebrane pewne artykuły, które mogą być pomocne.

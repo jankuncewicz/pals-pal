@@ -1,12 +1,19 @@
 var tabsState = 1;
 
 var run;
+var parser;
+
+function clearAll(){
+    document.getElementById("tau").value = ""
+    document.getElementById("ans").value = ""
+}
 
 function changeState(st){
 	if(st == tabsState) return
 	document.getElementById("tab"+tabsState).style = "";
 	document.getElementById("tab"+st).style = "background-color: #ccc;";
     tabsState = st
+    clearAll()
     switch(tabsState){
         case 0:
             document.getElementById("tau").readOnly = true       
@@ -29,4 +36,11 @@ function changeState(st){
             document.getElementById("ans").readOnly = true       
             document.getElementById("file").disabled = false
     }
+}
+
+var parseFile;
+
+async function readFile(){
+    let file = await document.getElementById("file").files[0].text()
+    parseFile(file) 
 }
