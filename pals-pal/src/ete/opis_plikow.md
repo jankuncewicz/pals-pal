@@ -22,9 +22,8 @@ jak powinno być.
 Stosuję tutaj zwykłą metodę Newtona-Raphsona do wyliczenia wartości
 $R$. Dla zakresu gdzie pochodna z ma dużą wartość ta metoda jest
 szybko zbieżna, niestety dla fragmentów od ok. 130 ns (i wysokiej temperatury)
-zaczynają się schody. Mam tutaj pomysł, żeby dla takich warunków obniżać
-dokładność tej metody, ale raczej użytkownik by tego nie chciał.
-Muszę jeszcze sam poszperać po innych algorytmach aprokymacyjnych.
+zaczynają się schody. Dla wartości o małej pochodnej (w tym wypadku mniejszej
+od 0.1) przekazuję dalej liczenie do innego algorytmu - metody Brenta.
 
 W głównej funckji `approx` wykonuje jakieś początkowe odgadnięcie tego
 $R$. Po prostu "wymyśliłem" sobie funkcję podobną do $\tau(R)$ i używając

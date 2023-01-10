@@ -2,6 +2,8 @@ var tabsState = 1;
 
 var run;
 var parser;
+var loadFileFlag = false
+var times
 
 function clearAll(){
     document.getElementById("tau").value = ""
@@ -40,7 +42,11 @@ function changeState(st){
 
 var parseFile;
 
-async function readFile(){
-    let file = await document.getElementById("file").files[0].text()
-    parseFile(file) 
+function readFile(){
+    let file = document.getElementById("file").files[0]
+    if(file != undefined){
+        return file.text().then(t => {parseFile(t)})
+    }
+    else
+        alert("Please enetr valid file!")
 }

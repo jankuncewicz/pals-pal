@@ -1,6 +1,8 @@
 mod utils;
 
 use wasm_bindgen::prelude::*;
+use js_sys::{Float64Array, Map};
+use console_error_panic_hook::set_once;
 
 #[path = "ete/approx_r.rs"]
 mod r;
@@ -10,6 +12,20 @@ mod tau;
 
 #[path = "plotting/plot.rs"]
 mod func_plot;
+
+#[wasm_bindgen]
+extern "C" {
+    // Use `js_namespace` here to bind `console.log(..)` instead of just
+    // `log(..)`
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+}
+
+macro_rules! console_log {
+    // Note that this is using the `log` function imported above during
+    // `bare_bones`
+    ($($t:tt)*) => (log(&format_args!($($t)*).to_string()))
+}
 
 pub type DrawResult<T> = Result<T, Box<dyn std::error::Error>>;
 
@@ -25,7 +41,12 @@ static mut INTS: Vec<Vec<f64>> = Vec::new();
 #[wasm_bindgen]
 pub fn calculate_r(tau: f64, delta: f64, t: f64) -> f64 {
 	unsafe{
-		return r::approx(tau, 100, 100, delta, t, 0.000001, &mut ZEROS, &mut INTS);
+        set_once();
+        console_log!("{}", ZEROS.len());
+		let ans = r::approx(tau, 100, 100, delta, t, 0.000001, &mut ZEROS, &mut INTS);
+        console_log!("{}", ZEROS.len());
+        console_log!("{}", ans*2.0);
+        return ans;
 	}
 	//println!("{:?}", zeros);
 }
@@ -33,8 +54,33 @@ pub fn calculate_r(tau: f64, delta: f64, t: f64) -> f64 {
 #[wasm_bindgen]
 pub fn calculate_tau(r: f64, delta: f64, t: f64) -> f64 {
     unsafe{
-        return tau::tau(100, 100, r, delta, t, 0.000001, &mut ZEROS, &mut INTS);
+        console_log!("zeros len: {}", ZEROS.len());
+        if ZEROS.len() != 0 {
+            console_log!("zeros[0] len: {}", ZEROS[0].len());
+        }
+        return tau::tau(200, 200, r, delta, t, 0.000001, &mut ZEROS, &mut INTS);
     }
+}
+
+#[wasm_bindgen]
+pub fn calculate_array(arr: &Float64Array, delta: f64, t: f64) {
+    unsafe{
+        let data: Vec<f64> = arr.to_vec();
+        let test: Vec<f64> = data.iter().map(|x| {
+            let h: f64 = r::approx(*x, 100, 100, delta, t, 0.000001, &mut ZEROS, &mut INTS);
+            console_log!("{}, {}", *x, h);
+            return h;
+        }).collect();
+        console_log!("Finished!");
+        arr.copy_from(&test);
+    }
+}
+
+#[wasm_bindgen]
+pub fn test(t: &Map) {
+    t.for_each(&mut |val, key| {
+        console_log!("{:?} {:?}", val, key);
+    });
 }
 
 #[wasm_bindgen]

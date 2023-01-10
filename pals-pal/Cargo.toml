@@ -23,6 +23,11 @@ lto = true
 # to interact with JavaScript.
 wasm-bindgen = "0.2.45"
 
+js-sys = "*"
+argmin = { version = "0.7.0", features = ["wasm-bindgen"] }
+console_error_panic_hook = "0.1.7"
+lazy_static = "*"
+
 plotters = "*"
 plotters-canvas = "*"
 
