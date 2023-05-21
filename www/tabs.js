@@ -1,9 +1,7 @@
 var tabsState = 1;
 
 var run;
-var parser;
 var loadFileFlag = false
-var times
 
 function clearAll(){
     document.getElementById("tau").value = ""
@@ -40,13 +38,31 @@ function changeState(st){
     }
 }
 
-var parseFile;
+function parseFile(file) {
+    let parsed = file.split(/\r?\n|\n/g)
+    parsed.pop()
+    parsed = parsed.map(x => parseFloat(x.split(",")[0]))
+    return parsed
+}
 
 function readFile(){
     let file = document.getElementById("file").files[0]
     if(file != undefined){
-        return file.text().then(t => {parseFile(t)})
+        return file.text().then(t => {return parseFile(t)})
     }
     else
-        alert("Please enetr valid file!")
+        alert("Please enter valid file!")
 }
+
+/*
+const n = 200
+var zeros = new Float64Array(n*n)
+async function test() {
+    var mod = await Module()
+    for (let i = 0; i < n; i++) {
+        for (let j = 1; j <= n; j++) {
+            zeros[i*n + j - 1] = mod._gsl_sf_bessel_zero_Jnu(i, j)
+        }
+    }
+}
+*/

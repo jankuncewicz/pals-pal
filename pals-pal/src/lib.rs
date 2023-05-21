@@ -46,6 +46,7 @@ pub fn calculate_r(tau: f64, delta: f64, t: f64) -> f64 {
 		let ans = r::approx(tau, 100, 100, delta, t, 0.000001, &mut ZEROS, &mut INTS);
         console_log!("{}", ZEROS.len());
         console_log!("{}", ans*2.0);
+        console_log!("{} {}", INTS[0][0], INTS[0][1]);
         return ans;
 	}
 	//println!("{:?}", zeros);
@@ -63,7 +64,7 @@ pub fn calculate_tau(r: f64, delta: f64, t: f64) -> f64 {
 }
 
 #[wasm_bindgen]
-pub fn calculate_array(arr: &Float64Array, delta: f64, t: f64) {
+pub fn calculate_array(arr: &Float64Array, delta: f64, t: f64, canvas_id: &str) {
     unsafe{
         let data: Vec<f64> = arr.to_vec();
         let test: Vec<f64> = data.iter().map(|x| {
@@ -71,7 +72,9 @@ pub fn calculate_array(arr: &Float64Array, delta: f64, t: f64) {
             console_log!("{}, {}", *x, h);
             return h;
         }).collect();
+        let to_draw: Vec<(f32, f32)> = test.iter().zip(data.iter()).map(|(x, y)| (*x as f32, *y as f32)).collect();
         console_log!("Finished!");
+        Chart::draw_times(canvas_id, to_draw);
         arr.copy_from(&test);
     }
 }
@@ -95,15 +98,11 @@ pub struct Point {
     pub y: f64,
 }
 
-#[wasm_bindgen]
 impl Chart {
     /// Draw provided power function on the canvas element using it's id.
     /// Return `Chart` struct suitable for coordinate conversion.
-    pub fn power(canvas_id: &str, power: i32) -> Result<Chart, JsValue> {
-        let map_coord = func_plot::draw(canvas_id, power).map_err(|err| err.to_string())?;
-        Ok(Chart {
-            convert: Box::new(move |coord| map_coord(coord).map(|(x, y)| (x.into(), y.into()))),
-        })
+    pub fn draw_times(canvas_id: &str, data_points: Vec<(f32, f32)>)  {
+        let map_coord = func_plot::draw(canvas_id, data_points).map_err(|err| err.to_string());
     }
 
     /// This function can be used to convert screen coordinates to

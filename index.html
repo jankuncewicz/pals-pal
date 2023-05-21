@@ -23,8 +23,8 @@
 		</style>
 	</head>
 	<body>
-		<script src="tabs.js"></script>
-		<script src="index.js"></script>
+		<script src="www/tabs.js"></script>
+		<script type="module" src="www/index.js"></script>
 		<div id="whole">
 		<div id="tabs">
 			<button id="tab0" class="tabs" onclick="changeState(0)">Calculate tau</button>
@@ -62,7 +62,7 @@
 			<input id="submit" type="submit" value="Calculate">
 		</div>
 		</form>
-		<canvas id="canvas" width="600" height="400"></canvas>
+		<canvas id="canvas" width="500" height="400"></canvas>
 		</div>
 		<script>
 			document.getElementById("form").addEventListener("submit", e => e.preventDefault())

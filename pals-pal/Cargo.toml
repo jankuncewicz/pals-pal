@@ -3,7 +3,6 @@ name = "pals-pal"
 version = "0.1.0"
 authors = ["Jan Kuncewicz <kuncewiczjan@gmail.com>"]
 categories = ["wasm"]
-readme = "README.md"
 edition = "2018"
 
 [lib]
