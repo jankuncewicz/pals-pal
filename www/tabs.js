@@ -8,6 +8,13 @@ function clearAll(){
     document.getElementById("ans").value = ""
 }
 
+function clearCanvas(){
+	let canvas = document.getElementById("canvas")
+	let context = canvas.getContext('2d')
+	context.clearRect(0, 0, canvas.width, canvas.height)
+	document.getElementById("message").innerText = ""
+}
+
 function changeState(st){
 	if(st == tabsState) return
 	document.getElementById("tab"+tabsState).style = "";
@@ -21,6 +28,7 @@ function changeState(st){
             document.getElementById("ans").required = true       
             document.getElementById("ans").readOnly = false       
             document.getElementById("file").disabled = true
+            clearCanvas()
             break
         case 1:
             document.getElementById("tau").readOnly = false       
@@ -28,6 +36,7 @@ function changeState(st){
             document.getElementById("ans").required = false       
             document.getElementById("ans").readOnly = true       
             document.getElementById("file").disabled = true
+            clearCanvas()
             break
         case 2:
             document.getElementById("tau").readOnly = true       

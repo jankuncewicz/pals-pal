@@ -4,7 +4,6 @@ function get(s){
 	return document.getElementById(s).value;
 }
 
-//TODO: implement csv parsing
 async function run_wasm(){
 	await init();
     run = () => {
@@ -29,27 +28,10 @@ async function run_wasm(){
 	    		delta = parseFloat(get("delta"))
 				readFile().then((times) => {
 					let rs = new Float64Array(times)
-					console.log(rs)
+					//console.log(rs)
 					calculate_array(rs, delta, temp, "canvas")
-					console.log(rs);
-					console.log(times);
-
-					let ansString = []
-					for (let i = 0; i < times.length; i++) {
-						ansString.push(times[i] + "," + rs[i] + "\n")
-					}
-
-					const ans = new File(ansString, "calculated_rs.csv", {type: 'text/csv;charset=utf-8;'});
-					const link = document.createElement('a')
-					const url = URL.createObjectURL(ans)
-				  
-					link.href = url
-					link.download = ans.name
-					document.body.appendChild(link)
-					link.click()
-				  
-					document.body.removeChild(link)
-					window.URL.revokeObjectURL(url)
+					//console.log(rs);
+					//console.log(times);
 				})
 				//wasm.calculate_array(times)
     }}

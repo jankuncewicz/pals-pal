@@ -1,8 +1,13 @@
 mod utils;
 
+use std::{rc::Rc, cell::RefCell, sync::Mutex};
+
+use lazy_static::lazy_static;
 use wasm_bindgen::prelude::*;
 use js_sys::{Float64Array, Map};
 use console_error_panic_hook::set_once;
+use web_sys;
+use wasm_bindgen::JsCast;
 
 #[path = "ete/approx_r.rs"]
 mod r;
@@ -19,6 +24,10 @@ extern "C" {
     // `log(..)`
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
+}
+#[wasm_bindgen(module="/../www/message.js")]
+extern "C" {
+    fn write_message(tau: f64, r: f64, current: usize, max_len: usize);
 }
 
 macro_rules! console_log {
@@ -63,19 +72,42 @@ pub fn calculate_tau(r: f64, delta: f64, t: f64) -> f64 {
     }
 }
 
+fn window() -> web_sys::Window {
+    web_sys::window().expect("no global `window` exists")
+}
+
+
+fn request_animation_frame(f: &Closure<dyn FnMut()>) {
+    window()
+        .request_animation_frame(f.as_ref().unchecked_ref())
+        .expect("should register `requestAnimationFrame` OK");
+}
+
 #[wasm_bindgen]
 pub fn calculate_array(arr: &Float64Array, delta: f64, t: f64, canvas_id: &str) {
     unsafe{
         let data: Vec<f64> = arr.to_vec();
-        let test: Vec<f64> = data.iter().map(|x| {
-            let h: f64 = r::approx(*x, 100, 100, delta, t, &mut ZEROS, &mut INTS);
-            console_log!("{}, {}", *x, h);
-            return h;
-        }).collect();
-        let to_draw: Vec<(f32, f32)> = test.iter().zip(data.iter()).map(|(x, y)| (*x as f32, *y as f32)).collect();
-        console_log!("Finished!");
-        Chart::draw_times(canvas_id, to_draw);
-        arr.copy_from(&test);
+        
+        let f = Rc::new(RefCell::new(None));
+        let g = f.clone();
+
+        let mut i = 0;
+        let mut ans = vec![0.; data.len()];
+        let canvas_id_cp = canvas_id.to_owned();
+
+        *g.borrow_mut() = Some(Closure::new(move || {
+            if i >= data.len() {
+                let _ = f.borrow_mut().take();
+                let to_draw: Vec<(f32, f32)> = ans.iter().zip(data.iter()).map(|(x, y)| (*x as f32, *y as f32)).collect();
+                Chart::draw_times(&canvas_id_cp, to_draw);
+                return;
+            }
+            ans[i] = r::approx(data[i], 100, 100, delta, t, &mut ZEROS, &mut INTS);
+            write_message(data[i], ans[i], i, data.len());
+            request_animation_frame(f.borrow().as_ref().unwrap());
+            i += 1;
+        }));
+        request_animation_frame(g.borrow().as_ref().unwrap());
     }
 }
 
