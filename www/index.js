@@ -8,6 +8,7 @@ async function run_wasm(){
 	await init();
     run = () => {
 		let r, temp, delta, tau;
+		document.getElementById("submit").disabled = true
 		switch(tabsState){
 			case 0:
  	 	  		r = parseFloat(get("ans"))
@@ -15,6 +16,7 @@ async function run_wasm(){
 	    		delta = parseFloat(get("delta"))
 	    		tau = calculate_tau(r, delta, temp);
     			document.getElementById("tau").value = tau;
+				document.getElementById("submit").disabled = false
 				break
 			case 1:
  	 	  		tau = parseFloat(get("tau"))
@@ -22,10 +24,12 @@ async function run_wasm(){
 	    		delta = parseFloat(get("delta"))
 	    		r = calculate_r(tau, delta, temp);
     			document.getElementById("ans").value = r;
+				document.getElementById("submit").disabled = false
 				break
 			case 2:
 	   		 	temp = parseFloat(get("temp"))
 	    		delta = parseFloat(get("delta"))
+				document.getElementById("file").disabled = true
 				readFile().then((times) => {
 					let rs = new Float64Array(times)
 					//console.log(rs)

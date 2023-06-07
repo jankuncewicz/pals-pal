@@ -12,17 +12,21 @@ pub fn draw(canvas_id: &str, data_points: Vec<(f32, f32)>) -> Result<(), Box<dyn
     let min_x = data_points.iter().reduce(|a, i| if a.0 <= i.0 {a} else {i}).unwrap();
 
     let mut chart = ChartBuilder::on(&root)
-        .margin(5)
-        .set_all_label_area_size(50u32)
+        //.margin(20)
+        .y_label_area_size(120)
+        .x_label_area_size(80)
+        .top_x_label_area_size(80)
+        .right_y_label_area_size(120)
+        //.y_label_area_size(0)
         .build_cartesian_2d((min_x.0..max_x.0).log_scale(), min_x.1..max_x.1)?;
 
     chart.configure_mesh().x_labels(5).y_labels(10)
         .x_desc("R(nm)").y_desc("tau(ns)")
-        //.axis_desc_style(("sans-serif", 20))
-        //.label_style(("sans-serif", 20))
+        .axis_desc_style(("sans-serif", 24))
+        .label_style(("sans-serif", 24))
         .draw()?;
 
-    chart.draw_series(data_points.iter().map(|point| Circle::new(*point, 2, RED.filled()))).unwrap();
+    chart.draw_series(data_points.iter().map(|point| Circle::new(*point, 4, RED.filled()))).unwrap();
     //chart.draw_series(LineSeries::new(data_points, &RED))?;
     root.present()?;
     return Ok(());

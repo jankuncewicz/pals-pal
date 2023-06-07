@@ -24,5 +24,7 @@ export function write_message(tau, r, current, max_len) {
     
 	    document.body.removeChild(link)
 	    window.URL.revokeObjectURL(url)
+		document.getElementById("file").disabled = false
+		document.getElementById("submit").disabled = false
     }
 }
