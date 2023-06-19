@@ -1,8 +1,8 @@
 mod utils;
 
-use std::{rc::Rc, cell::RefCell, sync::Mutex};
+use std::{rc::Rc, cell::RefCell};
 
-use lazy_static::lazy_static;
+
 use wasm_bindgen::prelude::*;
 use js_sys::{Float64Array, Map};
 use console_error_panic_hook::set_once;
@@ -84,7 +84,7 @@ fn request_animation_frame(f: &Closure<dyn FnMut()>) {
 }
 
 #[wasm_bindgen]
-pub fn calculate_array(arr: &Float64Array, delta: f64, t: f64, canvas_id: &str) {
+pub fn calculate_array_r(arr: &Float64Array, delta: f64, t: f64, canvas_id: &str) {
     unsafe{
         let data: Vec<f64> = arr.to_vec();
         
@@ -103,6 +103,34 @@ pub fn calculate_array(arr: &Float64Array, delta: f64, t: f64, canvas_id: &str) 
                 return;
             }
             ans[i] = r::approx(data[i], 100, 100, delta, t, &mut ZEROS, &mut INTS);
+            write_message(data[i], ans[i], i, data.len());
+            request_animation_frame(f.borrow().as_ref().unwrap());
+            i += 1;
+        }));
+        request_animation_frame(g.borrow().as_ref().unwrap());
+    }
+}
+
+#[wasm_bindgen]
+pub fn calculate_array_tau(arr: &Float64Array, delta: f64, t: f64, canvas_id: &str) {
+    unsafe{
+        let data: Vec<f64> = arr.to_vec();
+        
+        let f = Rc::new(RefCell::new(None));
+        let g = f.clone();
+
+        let mut i = 0;
+        let mut ans = vec![0.; data.len()];
+        let canvas_id_cp = canvas_id.to_owned();
+
+        *g.borrow_mut() = Some(Closure::new(move || {
+            if i >= data.len() {
+                let _ = f.borrow_mut().take();
+                let to_draw: Vec<(f32, f32)> = data.iter().zip(ans.iter()).map(|(x, y)| (*x as f32, *y as f32)).collect();
+                Chart::draw_times(&canvas_id_cp, to_draw);
+                return;
+            }
+            ans[i] = tau::tau(100, 100, data[i], delta, t, &mut ZEROS, &mut INTS);
             write_message(data[i], ans[i], i, data.len());
             request_animation_frame(f.borrow().as_ref().unwrap());
             i += 1;
@@ -134,7 +162,7 @@ impl Chart {
     /// Draw provided power function on the canvas element using it's id.
     /// Return `Chart` struct suitable for coordinate conversion.
     pub fn draw_times(canvas_id: &str, data_points: Vec<(f32, f32)>)  {
-        let map_coord = func_plot::draw(canvas_id, data_points).map_err(|err| err.to_string());
+        let _map_coord = func_plot::draw(canvas_id, data_points).map_err(|err| err.to_string());
     }
 
     /// This function can be used to convert screen coordinates to

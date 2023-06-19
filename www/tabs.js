@@ -16,7 +16,7 @@ function clearCanvas(){
 }
 
 function changeState(st){
-	if(st == tabsState) return
+	//if(st == tabsState) return
 	document.getElementById("tab"+tabsState).style = "";
 	document.getElementById("tab"+st).style = "background-color: #ccc;";
     tabsState = st
@@ -27,7 +27,6 @@ function changeState(st){
             document.getElementById("tau").required = false       
             document.getElementById("ans").required = true       
             document.getElementById("ans").readOnly = false       
-            document.getElementById("file").disabled = true
             clearCanvas()
             break
         case 1:
@@ -35,16 +34,17 @@ function changeState(st){
             document.getElementById("tau").required = true      
             document.getElementById("ans").required = false       
             document.getElementById("ans").readOnly = true       
-            document.getElementById("file").disabled = true
             clearCanvas()
             break
-        case 2:
-            document.getElementById("tau").readOnly = true       
-            document.getElementById("tau").required = false       
-            document.getElementById("ans").required = false       
-            document.getElementById("ans").readOnly = true       
-            document.getElementById("file").disabled = false
     }
+    if(document.getElementById("check").checked){
+        document.getElementById("file").disabled = false
+        document.getElementById("tau").readOnly = true       
+        document.getElementById("tau").required = false       
+        document.getElementById("ans").required = false      
+        document.getElementById("ans").readOnly = true 
+    }
+
 }
 
 function parseFile(file) {
@@ -61,6 +61,21 @@ function readFile(){
     }
     else
         alert("Please enter valid file!")
+}
+
+function switchFile() {
+    let test = document.getElementById("file").disabled
+    changeState(tabsState)
+    if(test){
+        document.getElementById("file").disabled = false
+        document.getElementById("tau").readOnly = true       
+        document.getElementById("tau").required = false       
+        document.getElementById("ans").required = false      
+        document.getElementById("ans").readOnly = true 
+    }    
+    else{
+        document.getElementById("file").disabled = true
+    }
 }
 
 /*

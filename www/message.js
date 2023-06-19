@@ -13,7 +13,10 @@ export function write_message(tau, r, current, max_len) {
 	    	ansString.push(times[i] + "," + rs[i] + "\n")
 	    }
 
-	    const ans = new File(ansString, "calculated_rs.csv", {type: 'text/csv;charset=utf-8;'});
+		times = []
+		rs = []
+
+	    const ans = new File(ansString, "output.csv", {type: 'text/csv;charset=utf-8;'});
 	    const link = document.createElement('a')
 	    const url = URL.createObjectURL(ans)
     
