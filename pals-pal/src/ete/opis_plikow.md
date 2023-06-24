@@ -25,7 +25,6 @@ szybko zbieżna, niestety dla fragmentów od ok. 130 ns (i wysokiej temperatury)
 zaczynają się schody. Dla wartości o małej pochodnej (w tym wypadku mniejszej
 od 0.1) przekazuję dalej liczenie do innego algorytmu - metody Brenta.
 
-W głównej funckji `approx` wykonuje jakieś początkowe odgadnięcie tego
+W głównej funkcji `approx` wykonuje jakieś początkowe odgadnięcie tego
 $R$. Po prostu "wymyśliłem" sobie funkcję podobną do $\tau(R)$ i używając
-wxMaxima policzyłem jej funkcję odwrotną (po konkretny wzór proszę się
-zwrócić na koniec pliku `tex_code/notes.pdf`.
+wxMaxima policzyłem jej funkcję odwrotną.
