@@ -1,0 +1,54 @@
+#+options: toc:nil
+#+bibliography: refs.bib
+#+CITE_EXPORT: csl ~/Gity/pals-pal/www/ieee.csl
+* Introduction
+A web application for calculating the results of positronium
+annihilation models. It uses extended Tao-Eldrup model
+[cite:@goworek1998positronium] for calculating
+mean lifetime of positronium from the radius of the pore.
+Part of the code realting to numerical methodes has been
+written in Rust [cite:@rustup] and it compiled
+to WebAssembly [cite:@haas2017wasm].
+The entire code is open source and available on
+[[https://github.com/jankuncewicz/pals-pal][github]].
+It's accuracy has been compared with EELViS [cite:@eelvis].
+
+* Usage
+** Single data point
+The page consists of three buttons functioning as tabs, upon selecting
+which the following options are available: calculating lifetimes τ(r),
+calculating radii r(τ), and a brief documentation. Due to the fact that the
+data required for performing each of these operations is similar (T
+and ∆ always need to be provided), the fields remain unchanged for
+each tab.
+
+If necessary, the fields are locked to prevent random data from being
+entered, which could be misleading. When calculating a single result,
+after entering the data, the user receives the calculation result in
+the corresponding field ("Tau" for "Calculate Tau" and "R" for
+"Calculate R").
+
+** CSV file
+After selecting the "Upload File" option, the user is given the
+ability to add a pre-existing CSV file, which will be used for the
+calculations. The fields for entering the values of r and τ are
+locked. The user only needs to enter the parameters T and ∆ for the
+measurement series. Next, they should choose the CSV file for the
+calculations. The first column of the file should contain the values
+required for the calculations (τ for "Calculate Tau" and r for
+"Calculate R"), while the remaining columns are ignored. The file
+should not contain any headers. Upon clicking "Choose File," a system
+window for selecting the file is displayed, and it is loaded into the
+program.
+
+To provide feedback to the user during the calculation of the
+measurement series, the message "Calculating data points... [x/y]" is
+displayed, where x represents the number of values already calculated,
+and y represents the total number of values to be calculated. After
+the calculations are completed, a graph is displayed, and the output
+is provided in a downloadable CSV file named "output.csv." The file
+contains data in two columns. The first column contains the original
+value relative to which the calculations were performed, and the
+second column contains the calculated values.
+* References
+#+PRINT_BIBLIOGRAPHY:

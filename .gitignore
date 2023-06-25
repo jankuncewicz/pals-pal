@@ -17,3 +17,5 @@ target
 *~
 \#*\#
 *.csv
+*.csl
+*.bib
