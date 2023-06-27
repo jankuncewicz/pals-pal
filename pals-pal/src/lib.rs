@@ -51,11 +51,7 @@ static mut INTS: Vec<Vec<f64>> = Vec::new();
 pub fn calculate_r(tau: f64, delta: f64, t: f64) -> f64 {
 	unsafe{
         set_once();
-        console_log!("{}", ZEROS.len());
-		let ans = r::approx(tau, 100, 100, delta, t, &mut ZEROS, &mut INTS);
-        console_log!("{}", ZEROS.len());
-        console_log!("{}", ans*2.0);
-        console_log!("{} {}", INTS[0][0], INTS[0][1]);
+		let ans = r::approx(tau, 200, 200, delta, t, &mut ZEROS, &mut INTS);
         return ans;
 	}
 	//println!("{:?}", zeros);
@@ -64,10 +60,6 @@ pub fn calculate_r(tau: f64, delta: f64, t: f64) -> f64 {
 #[wasm_bindgen]
 pub fn calculate_tau(r: f64, delta: f64, t: f64) -> f64 {
     unsafe{
-        console_log!("zeros len: {}", ZEROS.len());
-        if ZEROS.len() != 0 {
-            console_log!("zeros[0] len: {}", ZEROS[0].len());
-        }
         return tau::tau(200, 200, r, delta, t, &mut ZEROS, &mut INTS);
     }
 }
@@ -102,7 +94,7 @@ pub fn calculate_array_r(arr: &Float64Array, delta: f64, t: f64, canvas_id: &str
                 Chart::draw_times(&canvas_id_cp, to_draw);
                 return;
             }
-            ans[i] = r::approx(data[i], 100, 100, delta, t, &mut ZEROS, &mut INTS);
+            ans[i] = r::approx(data[i], 200, 200, delta, t, &mut ZEROS, &mut INTS);
             write_message(data[i], ans[i], i, data.len());
             request_animation_frame(f.borrow().as_ref().unwrap());
             i += 1;
@@ -130,7 +122,7 @@ pub fn calculate_array_tau(arr: &Float64Array, delta: f64, t: f64, canvas_id: &s
                 Chart::draw_times(&canvas_id_cp, to_draw);
                 return;
             }
-            ans[i] = tau::tau(100, 100, data[i], delta, t, &mut ZEROS, &mut INTS);
+            ans[i] = tau::tau(200, 200, data[i], delta, t, &mut ZEROS, &mut INTS);
             write_message(data[i], ans[i], i, data.len());
             request_animation_frame(f.borrow().as_ref().unwrap());
             i += 1;

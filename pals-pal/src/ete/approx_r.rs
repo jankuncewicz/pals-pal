@@ -37,8 +37,8 @@ fn zero_brent(x0: f64, tau: f64, n: usize, m: usize, delta: f64, t: f64,
 	
 
 	let problem = Problem{tau, n, m, delta, t};
-	let solver = BrentRoot::new(0.0, 142.0, 1e-5);
-	let exec = Executor::new(problem, solver).configure(|state| state.param(x0).max_iters(200)).run();
+	let solver = BrentRoot::new(1e-5, 142.0, 1e-5);
+	let exec = Executor::new(problem, solver).configure(|state| state.param(x0).max_iters(100)).run();
 
 	zeros.clone_from(&G_ZEROS.lock().unwrap());
 	ints.clone_from(&G_INTS.lock().unwrap());

@@ -11,7 +11,8 @@ fn energy(zero: f64, r: f64, delta: f64, t: f64) -> f64 {
 fn pnm(m: i32, r: f64, delta: f64, zero : f64, inte: f64) -> f64 {
 	let ans =  int::gauss(zero*(r/(r+delta)), zero, m) / inte;
 	if ans.is_nan() { return 0.0; }
-	if ans.is_infinite() { return 1.0; }
+	if ans.is_infinite() { return 0.0; }
+	if ans < 0. { return -ans; }
 	return ans;
 }
 
